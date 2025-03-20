@@ -1,3 +1,5 @@
 spring:
   profiles:
     include: datasource
+server:
+  port: 8082
