@@ -1,6 +1,6 @@
 package lemoon.messageboard.application.service;
 
-import lemoon.messageboard.application.dto.RegisterRequest;
+import lemoon.messageboard.application.dto.RegisterParam;
 import lemoon.messageboard.model.Customer;
 import lemoon.messageboard.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +19,22 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void register(RegisterRequest registerRequest) {
+    public void register(RegisterParam registerParam) {
         // 检查用户名是否已存在
-        if (customerRepository.existsByName(registerRequest.getName())) {
+        if (customerRepository.existsByName(registerParam.getName())) {
             throw new RuntimeException("用户名已被使用");
         }
 
         // 检查邮箱是否已存在
-        if (customerRepository.existsByEmail(registerRequest.getEmail())) {
+        if (customerRepository.existsByEmail(registerParam.getEmail())) {
             throw new RuntimeException("邮箱已被使用");
         }
 
         // 创建用户并保存
         Customer customer = new Customer();
-        customer.setName(registerRequest.getName());
-        customer.setEmail(registerRequest.getEmail());
-        customer.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        customer.setName(registerParam.getName());
+        customer.setEmail(registerParam.getEmail());
+        customer.setPassword(passwordEncoder.encode(registerParam.getPassword()));
         customer.setCreatedTime(LocalDateTime.now());
 
         customerRepository.save(customer);

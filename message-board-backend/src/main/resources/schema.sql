@@ -1,6 +1,4 @@
-DROP TABLE IF EXISTS customer;
-
-CREATE TABLE customer (
+CREATE TABLE IF NOT EXISTS customer (
                     id TINYINT AUTO_INCREMENT PRIMARY KEY comment '主键',
                     name VARCHAR(64) NOT NULL UNIQUE comment '用户名',
                     password VARCHAR(255) NOT NULL comment '密码',

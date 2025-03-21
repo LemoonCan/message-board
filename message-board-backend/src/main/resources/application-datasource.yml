@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:message-board
+    url: jdbc:h2:file:~/message-board
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -11,6 +11,10 @@ spring:
       path: /h2-console
       settings:
         web-allow-others: false
+  sql:
+    init:
+      mode: always       # 启用 SQL 初始化
+      platform: h2       # 指定数据库平台
 
   jpa:
     show-sql: true

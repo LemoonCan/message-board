@@ -1,7 +1,8 @@
 package lemoon.messageboard.controller;
 
-import lemoon.messageboard.application.dto.LoginRequest;
-import lemoon.messageboard.application.dto.RegisterRequest;
+import jakarta.validation.Valid;
+import lemoon.messageboard.application.dto.LoginParam;
+import lemoon.messageboard.application.dto.RegisterParam;
 import lemoon.messageboard.config.security.jwt.JwtTokenProvider;
 import lemoon.messageboard.application.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,25 +26,25 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody RegisterRequest registerRequest) {
-        userService.register(registerRequest);
+    public ResponseEntity<Void> register(@RequestBody @Valid RegisterParam registerParam) {
+        userService.register(registerParam);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Void> login(@RequestBody @Valid LoginParam loginParam) {
         // 认证用户
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getName(),
-                        loginRequest.getPassword()
+                        loginParam.getName(),
+                        loginParam.getPassword()
                 )
         );
 
         // 生成JWT令牌
         String jwt = jwtTokenProvider.createToken(authentication);
         // 更新最后登录时间
-        userService.updateLastLoginDate(loginRequest.getName());
+        userService.updateLastLoginDate(loginParam.getName());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
