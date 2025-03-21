@@ -3,3 +3,8 @@ spring:
     include: datasource
 server:
   port: 8082
+
+logging:
+  level:
+    org.springframework.security: DEBUG  # Spring Security 调试日志
+    org.apache.http.wire: DEBUG          # HTTP 请求日志
