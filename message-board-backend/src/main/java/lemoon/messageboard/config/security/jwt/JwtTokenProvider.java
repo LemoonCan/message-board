@@ -24,13 +24,29 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    private static final long TOKEN_VALIDITY = 30 * 24 * 60 * 60 * 1000L; // 30天
+    private static final long SESSION_TOKEN_VALIDITY = 24 * 60 * 60 * 1000L; // 1天（会话token）
+    private static final long REMEMBER_TOKEN_VALIDITY = 30 * 24 * 60 * 60 * 1000L; // 30天（记住我token）
 
     private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
+    /**
+     * 创建令牌（默认会话token）
+     */
     public String createToken(Authentication authentication) {
+        return createToken(authentication, false);
+    }
+
+    /**
+     * 创建带有不同过期时间的令牌
+     * @param authentication 认证信息
+     * @param rememberMe 是否记住我
+     * @return JWT令牌
+     */
+    public String createToken(Authentication authentication, boolean rememberMe) {
         long now = System.currentTimeMillis();
-        Date validity = new Date(now + TOKEN_VALIDITY);
+        // 根据rememberMe状态选择不同的过期时间
+        long tokenValidity = rememberMe ? REMEMBER_TOKEN_VALIDITY : SESSION_TOKEN_VALIDITY;
+        Date validity = new Date(now + tokenValidity);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())

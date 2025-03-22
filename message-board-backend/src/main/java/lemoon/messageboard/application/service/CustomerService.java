@@ -1,5 +1,6 @@
 package lemoon.messageboard.application.service;
 
+import lemoon.messageboard.application.dto.CustomerDTO;
 import lemoon.messageboard.application.dto.RegisterParam;
 import lemoon.messageboard.model.Customer;
 import lemoon.messageboard.repository.CustomerRepository;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
@@ -48,5 +49,15 @@ public class UserService {
             customer.setLastLoginTime(LocalDateTime.now());
             customerRepository.save(customer);
         }
+    }
+
+    @Transactional
+    public CustomerDTO findUser(String name) {
+        Optional<Customer> userOptional = customerRepository.findByName(name);
+        if (userOptional.isPresent()) {
+            Customer customer = userOptional.get();
+            return new CustomerDTO(customer.getId(), customer.getName(), customer.getEmail());
+        }
+        return null;
     }
 } 

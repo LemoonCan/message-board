@@ -36,3 +36,6 @@ build/
 
 data/
 logs/
+
+package-lock.json
+node_modules/

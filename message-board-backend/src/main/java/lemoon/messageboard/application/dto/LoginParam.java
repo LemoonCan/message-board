@@ -26,4 +26,6 @@ public class LoginParam {
             message = "密码必须包含至少1个大写字母、1个小写字母、1个数字和1个特殊符号(!@#$%^&*)"
     )
     private String password;
+    
+    private Boolean rememberMe = false;
 } 

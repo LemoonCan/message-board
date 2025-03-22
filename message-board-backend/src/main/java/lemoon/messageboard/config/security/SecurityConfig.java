@@ -25,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,13 +42,14 @@ public class SecurityConfig {
         http
                 .headers(headers -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 配置跨域
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 无状态 API 启用
 //                .requiresChannel(channel ->
 //                        channel.anyRequest().requiresSecure()) // 强制 HTTPS
                 .csrf(AbstractHttpConfigurer::disable) // 关闭 CSRF 保护
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/h2-console/**").permitAll() // 必须放行注册接口
+                        .requestMatchers("/api/auth/**", "/h2-console/**","/api/messages/full-tree").permitAll() // 必须放行注册接口
                         .anyRequest().authenticated()) // 其他接口需要认证
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class); // 添加JWT认证过滤器(会先于路径匹配执行)
 
@@ -58,9 +60,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://trusted-domain.com"));
-        config.setAllowedMethods(List.of("GET", "POST"));
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
+        config.setExposedHeaders(List.of("Authorization"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
