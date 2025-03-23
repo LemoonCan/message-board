@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: datasource
+    include: datasource, security
 server:
   port: 8082
 

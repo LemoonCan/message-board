@@ -1,39 +1,34 @@
 package lemoon.messageboard.config.security.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
+    @Value("${jwt.session-token-validity}")
+    private long SESSION_TOKEN_VALIDITY;
+    @Value("${jwt.remember-token-validity}")
+    private long REMEMBER_TOKEN_VALIDITY;
+    private final SecretKey key;
 
-    private static final long SESSION_TOKEN_VALIDITY = 24 * 60 * 60 * 1000L; // 1天（会话token）
-    private static final long REMEMBER_TOKEN_VALIDITY = 30 * 24 * 60 * 60 * 1000L; // 30天（记住我token）
-
-    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
-    /**
-     * 创建令牌（默认会话token）
-     */
-    public String createToken(Authentication authentication) {
-        return createToken(authentication, false);
+    public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey){
+        key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

@@ -1,0 +1,22 @@
+#server:
+#    ssl:
+#        key-store: classpath:mysslkeystore.jks
+#        key-store-password: suncloud
+#        key-password: suncloud
+#        key-store-type: PKCS12
+jwt:
+    secret-key: ahS5KSNdQ8444ei61f1CtjbAyHqxbsCBBgvDKSG/rwl5HUDttlPdxMq81vTDtYEdMRCIGk5/x/GqagfK6etJmw==
+    session-token-validity: 86400000
+    remember-token-validity: 2592000000
+
+
+security:
+    permitUrls:
+        - /api/auth/**
+        - /h2-console/**
+        - /api/messages/full-tree
+    cors:
+        allowed-origins:
+            - http://localhost:3000
+
+
