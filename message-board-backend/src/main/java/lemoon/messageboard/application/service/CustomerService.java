@@ -36,7 +36,7 @@ public class CustomerService {
         customer.setName(registerParam.getName());
         customer.setEmail(registerParam.getEmail());
         customer.setPassword(passwordEncoder.encode(registerParam.getPassword()));
-        customer.setCreatedTime(LocalDateTime.now());
+        customer.setCreatedAt(LocalDateTime.now());
 
         customerRepository.save(customer);
     }
@@ -46,7 +46,7 @@ public class CustomerService {
         Optional<Customer> userOptional = customerRepository.findByName(username);
         if (userOptional.isPresent()) {
             Customer customer = userOptional.get();
-            customer.setLastLoginTime(LocalDateTime.now());
+            customer.setLastLoginAt(LocalDateTime.now());
             customerRepository.save(customer);
         }
     }

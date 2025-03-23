@@ -25,9 +25,9 @@ public class Message {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
     
-    @Column(name = "created_time", nullable = false, updatable = false)
-    private LocalDateTime createdTime = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
     
-    @Column(name = "updated_time")
-    private LocalDateTime updatedTime;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 } 

@@ -16,7 +16,7 @@ public class MessageDTO {
     private String content;
     private Long customerId;
     private String customerName;
-    private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private List<MessageDTO> children = new ArrayList<>();
 } 

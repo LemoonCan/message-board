@@ -38,8 +38,8 @@ public class MessageServiceImpl implements MessageService {
         dto.setContent(message.getContent());
         dto.setCustomerId(message.getCustomer().getId());
         dto.setCustomerName(message.getCustomer().getName());
-        dto.setCreatedTime(message.getCreatedTime());
-        dto.setUpdatedTime(message.getUpdatedTime());
+        dto.setCreatedAt(message.getCreatedAt());
+        dto.setUpdatedAt(message.getUpdatedAt());
         return dto;
     }
 
@@ -48,7 +48,7 @@ public class MessageServiceImpl implements MessageService {
         Message message = new Message();
         message.setContent(dto.getContent());
         message.setCustomer(customer);
-        message.setCreatedTime(LocalDateTime.now());
+        message.setCreatedAt(LocalDateTime.now());
         return message;
     }
 
@@ -200,7 +200,7 @@ public class MessageServiceImpl implements MessageService {
                 .orElseThrow(() -> new RuntimeException("留言不存在"));
         
         message.setContent(messageDTO.getContent());
-        message.setUpdatedTime(LocalDateTime.now());
+        message.setUpdatedAt(LocalDateTime.now());
         message = messageRepository.save(message);
         
         return convertToDTO(message);

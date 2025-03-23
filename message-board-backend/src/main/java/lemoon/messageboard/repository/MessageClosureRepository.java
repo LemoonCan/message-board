@@ -22,7 +22,7 @@ public interface MessageClosureRepository extends JpaRepository<MessageClosure, 
     Message findParent(@Param("messageId") Long messageId);
     
     // 找到所有顶级留言（没有父级的留言）
-    @Query("SELECT m FROM Message m WHERE NOT EXISTS (SELECT 1 FROM MessageClosure mc WHERE mc.descendant.id = m.id AND mc.depth > 0)")
+    @Query("SELECT m FROM Message m WHERE NOT EXISTS (SELECT 1 FROM MessageClosure mc WHERE mc.descendant.id = m.id AND mc.depth > 0) order by m.createdAt DESC")
     List<Message> findRootMessages();
     
     // 找到指定消息的所有后代
@@ -30,11 +30,11 @@ public interface MessageClosureRepository extends JpaRepository<MessageClosure, 
     List<Message> findDescendants(@Param("messageId") Long messageId);
     
     // 找到指定消息的直接子留言
-    @Query("SELECT mc.descendant FROM MessageClosure mc WHERE mc.ancestor.id = :messageId AND mc.depth = 1 ORDER BY mc.descendant.createdTime DESC")
+    @Query("SELECT mc.descendant FROM MessageClosure mc WHERE mc.ancestor.id = :messageId AND mc.depth = 1 ORDER BY mc.descendant.createdAt DESC")
     List<Message> findChildren(@Param("messageId") Long messageId);
     
     // 根据深度获取层级留言
-    @Query("SELECT mc.descendant FROM MessageClosure mc WHERE mc.ancestor.id = :rootId AND mc.depth <= :maxDepth ORDER BY mc.depth ASC, mc.descendant.createdTime DESC")
+    @Query("SELECT mc.descendant FROM MessageClosure mc WHERE mc.ancestor.id = :rootId AND mc.depth <= :maxDepth ORDER BY mc.depth ASC, mc.descendant.createdAt DESC")
     List<Message> findMessagesByMaxDepth(@Param("rootId") Long rootId, @Param("maxDepth") Integer maxDepth);
     
     // 删除与指定留言相关的所有闭包表记录

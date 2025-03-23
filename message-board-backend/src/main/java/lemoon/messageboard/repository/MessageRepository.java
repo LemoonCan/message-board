@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    @Query("SELECT m FROM Message m JOIN Customer c ON m.customer.id = c.id WHERE c.id = :customerId ORDER BY m.createdTime DESC")
+    @Query("SELECT m FROM Message m JOIN Customer c ON m.customer.id = c.id WHERE c.id = :customerId ORDER BY m.createdAt DESC")
     List<Message> findByCustomerId(@Param("customerId") Long customerId);
 } 

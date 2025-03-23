@@ -27,9 +27,9 @@ public class Customer {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "last_login_time")
-    private LocalDateTime lastLoginTime;
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
     
-    @Column(name = "created_time", nullable = false, updatable = false)
-    private LocalDateTime createdTime = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 } 
