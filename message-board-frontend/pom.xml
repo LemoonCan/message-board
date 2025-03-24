@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.lemooncan</groupId>
-        <artifactId>messagec-board</artifactId>
+        <artifactId>message-board</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>messagec-board-frontend</artifactId>
+    <artifactId>message-board-frontend</artifactId>
     <version>1.0-SNAPSHOT</version>
 </project>

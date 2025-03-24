@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.lemooncan</groupId>
-    <artifactId>messagec-board</artifactId>
+    <artifactId>message-board</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>messagec-board-backend</module>
-        <module>messagec-board-frontend</module>
+        <module>message-board-backend</module>
+        <module>message-board-frontend</module>
     </modules>
 
     <dependencyManagement>
@@ -79,8 +79,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.0</version>
                     <configuration>
-                        <source>1.19</source>
-                        <target>1.19</target>
+                        <source>19</source>
+                        <target>19</target>
                         <parameters>true</parameters>
                     </configuration>
                 </plugin>

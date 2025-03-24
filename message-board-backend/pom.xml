@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.lemooncan</groupId>
-        <artifactId>messagec-board</artifactId>
+        <artifactId>message-board</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>messagec-board-backend</artifactId>
+    <artifactId>message-board-backend</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
