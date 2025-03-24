@@ -7,6 +7,7 @@ import lemoon.messageboard.model.Message;
 import lemoon.messageboard.model.MessageClosure;
 import lemoon.messageboard.repository.MessageClosureRepository;
 import lemoon.messageboard.repository.MessageRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,51 +17,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
     private final MessageClosureRepository messageClosureRepository;
 
-    @Autowired
-    public MessageServiceImpl(MessageRepository messageRepository, MessageClosureRepository messageClosureRepository) {
-        this.messageRepository = messageRepository;
-        this.messageClosureRepository = messageClosureRepository;
-    }
-
-    // 将消息实体转换为DTO
-    private MessageDTO convertToDTO(Message message) {
-        if (message == null) {
-            return null;
-        }
-        
-        MessageDTO dto = new MessageDTO();
-        dto.setId(message.getId());
-        dto.setContent(message.getContent());
-        dto.setCustomerId(message.getCustomer().getId());
-        dto.setCustomerName(message.getCustomer().getName());
-        dto.setCreatedAt(message.getCreatedAt());
-        dto.setUpdatedAt(message.getUpdatedAt());
-        return dto;
-    }
-
-    // 将DTO转换为消息实体
-    private Message convertToEntity(MessageDTO dto, Customer customer) {
-        Message message = new Message();
-        message.setContent(dto.getContent());
-        message.setCustomer(customer);
-        message.setCreatedAt(LocalDateTime.now());
-        return message;
-    }
-
     @Override
     @Transactional
     public MessageDTO createRootMessage(MessageDTO messageDTO) {
-        // 假设已经有Customer实体，这里简化处理
-        Customer customer = new Customer();
-        customer.setId(messageDTO.getCustomerId());
-        
-        Message message = convertToEntity(messageDTO, customer);
-        message = messageRepository.save(message);
+        Message message = messageRepository.save(MessageConverter.toEntity(messageDTO));
         
         // 为新消息创建自引用的闭包表记录（深度为0）
         MessageClosure closure = new MessageClosure();
@@ -69,7 +35,7 @@ public class MessageServiceImpl implements MessageService {
         closure.setDepth(0);
         messageClosureRepository.save(closure);
         
-        return convertToDTO(message);
+        return MessageConverter.toDTO(message);
     }
 
     @Override
@@ -77,12 +43,9 @@ public class MessageServiceImpl implements MessageService {
     public MessageDTO replyToMessage(Long parentId, MessageDTO messageDTO) {
         Message parentMessage = messageRepository.findById(parentId)
                 .orElseThrow(() -> new RuntimeException("父留言不存在"));
+
         
-        // 假设已经有Customer实体，这里简化处理
-        Customer customer = new Customer();
-        customer.setId(messageDTO.getCustomerId());
-        
-        Message message = convertToEntity(messageDTO, customer);
+        Message message = MessageConverter.toEntity(messageDTO);
         message = messageRepository.save(message);
         
         // 1. 创建自引用的闭包表记录（深度为0）
@@ -117,20 +80,20 @@ public class MessageServiceImpl implements MessageService {
             messageClosureRepository.saveAll(newClosures);
         }
         
-        return convertToDTO(message);
+        return MessageConverter.toDTO(message);
     }
 
     @Override
     public List<MessageDTO> getAllRootMessages() {
         return messageClosureRepository.findRootMessages().stream()
-                .map(this::convertToDTO)
+                .map(MessageConverter::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<MessageDTO> getChildrenMessages(Long messageId) {
         return messageClosureRepository.findChildren(messageId).stream()
-                .map(this::convertToDTO)
+                .map(MessageConverter::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -151,7 +114,7 @@ public class MessageServiceImpl implements MessageService {
         Message message = messageRepository.findById(messageId)
                 .orElseThrow(() -> new RuntimeException("留言不存在"));
         
-        MessageDTO rootDTO = convertToDTO(message);
+        MessageDTO rootDTO = MessageConverter.toDTO(message);
         buildMessageTree(rootDTO, maxDepth, 1);
         
         return rootDTO;
@@ -203,7 +166,7 @@ public class MessageServiceImpl implements MessageService {
         message.setUpdatedAt(LocalDateTime.now());
         message = messageRepository.save(message);
         
-        return convertToDTO(message);
+        return MessageConverter.toDTO(message);
     }
 
     @Override

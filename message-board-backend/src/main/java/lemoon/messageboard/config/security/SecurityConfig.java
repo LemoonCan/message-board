@@ -86,8 +86,8 @@ public class SecurityConfig {
     public class MessageBoardUserDetailsService implements UserDetailsService {
 
         @Override
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            Optional<Customer> customerOptional = customerRepository.findByName(username);
+        public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+            Optional<Customer> customerOptional = customerRepository.findByName(name);
             customerOptional.orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
             Customer customer = customerOptional.get();
             return new User(customer.getName(), customer.getPassword(), List.of());

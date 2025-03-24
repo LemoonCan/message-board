@@ -51,12 +51,12 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
           size="large"
         >
           <Form.Item
-            name="name"
-            rules={[{ required: true, message: '请输入用户名！' }]}
+            name="identity"
+            rules={[{ required: true, message: '请输入用户名或邮箱！' }]}
           >
             <Input 
               prefix={<UserOutlined />} 
-              placeholder="用户名" 
+              placeholder="用户名/邮箱" 
             />
           </Form.Item>
 
