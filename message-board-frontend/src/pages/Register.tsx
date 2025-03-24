@@ -41,7 +41,7 @@ const Register: React.FC = () => {
             name="name"
             rules={[
               { required: true, message: '请输入用户名！' },
-              { min: 3, message: '用户名至少3个字符' },
+              { min: 5, message: '用户名至少5个字符' },
               { max: 20, message: '用户名最多20个字符' }
             ]}
           >
@@ -68,7 +68,8 @@ const Register: React.FC = () => {
             name="password"
             rules={[
               { required: true, message: '请输入密码！' },
-              { min: 6, message: '密码至少6个字符' }
+              { min: 8, message: '密码至少8个字符' },
+              { max: 20, message: '密码最多20个字符'}
             ]}
           >
             <Input.Password

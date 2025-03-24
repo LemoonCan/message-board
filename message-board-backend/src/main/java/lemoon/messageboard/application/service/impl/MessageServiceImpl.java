@@ -2,16 +2,16 @@ package lemoon.messageboard.application.service.impl;
 
 import lemoon.messageboard.application.dto.MessageDTO;
 import lemoon.messageboard.application.service.MessageService;
+import lemoon.messageboard.application.service.impl.converter.MessagesConverter;
+import lemoon.messageboard.model.Customer;
 import lemoon.messageboard.model.Message;
 import lemoon.messageboard.repository.CustomerRepository;
 import lemoon.messageboard.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author lemoon
@@ -23,26 +23,30 @@ public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final CustomerRepository customerRepository;
 
+    @Transactional
     @Override
     public MessageDTO createRootMessage(MessageDTO messageDTO) {
-        if (customerRepository.existsById(messageDTO.getCustomerId())) {
+        Optional<Customer> customerOptional = customerRepository.findByName(messageDTO.getCustomerName());
+        if (customerOptional.isEmpty()) {
             throw new RuntimeException("用户不存在");
         }
 
-        Message message = messageRepository.save(MessagesConverter.toEntity(messageDTO));
+        Message message = messageRepository.save(MessagesConverter.toEntity(messageDTO, customerOptional.get()));
         return MessagesConverter.toDTO(message);
     }
 
+    @Transactional
     @Override
     public MessageDTO replyToMessage(Long parentId, MessageDTO messageDTO) {
-        if (customerRepository.existsById(messageDTO.getCustomerId())) {
+        Optional<Customer> customerOptional = customerRepository.findByName(messageDTO.getCustomerName());
+        if (customerOptional.isEmpty()) {
             throw new RuntimeException("用户不存在");
         }
         if (!messageRepository.existsById(parentId)) {
             throw new RuntimeException("父消息不存在");
         }
 
-        Message message = MessagesConverter.toEntity(messageDTO);
+        Message message = MessagesConverter.toEntity(messageDTO, customerOptional.get());
         Message parentMessage = new Message();
         parentMessage.setId(parentId);
         message.setParent(parentMessage);

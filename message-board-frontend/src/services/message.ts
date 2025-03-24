@@ -23,12 +23,10 @@ export interface CreateMessageRequest {
 const setAuthHeader = () => {
   // 先检查sessionStorage
   let userDataStr = sessionStorage.getItem(config.TOKEN_KEY);
-  console.log('sessionStorage中的用户数据:', userDataStr);
   
   // 如果sessionStorage中没有，再检查localStorage
   if (!userDataStr) {
     userDataStr = localStorage.getItem(config.TOKEN_KEY);
-    console.log('localStorage中的用户数据:', userDataStr);
   }
   
   if (userDataStr) {
@@ -108,19 +106,18 @@ export const createMessage = async (data: CreateMessageRequest): Promise<Message
     const userData = JSON.parse(userDataStr);
     const currentUser = userData.user;
     
-    if (!currentUser || !currentUser.id) {
+    if (!currentUser || !currentUser.name) {
       throw new Error('用户信息不完整');
     }
     
     // 构建符合后端MessageDTO格式的请求数据
     const messageDTO = {
       content: data.content,
-      customerId: currentUser.id,
+      customerName: currentUser.name,
       // parentId是可选的，在回复留言时使用
       ...(data.parentId ? { parentId: data.parentId } : {})
     };
     
-    console.log('发送的留言数据:', messageDTO);
     
     const response = await axios.post(`${API_URL}/messages/createMessage`, messageDTO, {
       headers: {
@@ -152,17 +149,16 @@ export const replyToMessage = async (parentId: number, content: string): Promise
     const userData = JSON.parse(userDataStr);
     const currentUser = userData.user;
     
-    if (!currentUser || !currentUser.id) {
+    if (!currentUser || !currentUser.name) {
       throw new Error('用户信息不完整');
     }
     
     // 构建符合后端MessageDTO格式的请求数据
     const messageDTO = {
       content: content,
-      customerId: currentUser.id
+      customerName: currentUser.name
     };
     
-    console.log(`发送回复数据至消息ID ${parentId}:`, messageDTO);
     
     const response = await axios.post(`${API_URL}/messages/${parentId}/reply`, messageDTO, {
       headers: {

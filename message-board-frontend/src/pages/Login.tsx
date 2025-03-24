@@ -18,7 +18,6 @@ const Login: React.FC<LoginProps> = ({ setUser }) => {
     try {
       setLoading(true);
       const user = await login(values);
-      console.log('登录组件收到的用户数据:', user);
       
       // 确保用户数据有效
       if (!user || typeof user !== 'object') {

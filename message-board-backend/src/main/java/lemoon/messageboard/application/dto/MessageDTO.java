@@ -1,5 +1,6 @@
 package lemoon.messageboard.application.dto;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MessageDTO {
     private Long id;
+    @Size(min = 3, max = 200, message = "内容需在3到200字符之间")
     private String content;
-    private Long customerId;
     private String customerName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

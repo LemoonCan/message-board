@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lemoon.messageboard.application.dto.CustomerDTO;
 import lemoon.messageboard.application.dto.LoginParam;
 import lemoon.messageboard.application.dto.RegisterParam;
-import lemoon.messageboard.application.service.CustomerService;
+import lemoon.messageboard.application.service.impl.CustomerServiceImpl;
 import lemoon.messageboard.config.security.jwt.JwtTokenProvider;
 import lemoon.messageboard.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +25,12 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomerService customerService;
+    private final CustomerServiceImpl customerServiceImpl;
     private final CustomerRepository customerRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterParam registerParam) {
-        customerService.register(registerParam);
+        customerServiceImpl.register(registerParam);
         return ResponseEntity.ok().build();
     }
 
@@ -58,10 +58,10 @@ public class AuthController {
         String jwt = jwtTokenProvider.createToken(authentication, rememberMe);
 
         // 更新最后登录时间
-        customerService.updateLastLoginDate(name);
+        customerServiceImpl.updateLastLoginDate(name);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
-                .body(customerService.findUser(name));
+                .body(customerServiceImpl.findUser(name));
     }
 }

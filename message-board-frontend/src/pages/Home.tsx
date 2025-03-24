@@ -64,14 +64,11 @@ const Home: React.FC<HomeProps> = ({ user }) => {
   const fetchReplies = async (messageId: number) => {
     setRepliesLoading(prev => ({ ...prev, [messageId]: true }));
     try {
-      console.log(`单独获取消息ID ${messageId} 的回复...`);
       const replies = await getMessageReplies(messageId);
-      console.log(`获取到 ${replies.length} 条回复`);
       
       setMessages(prevMessages => {
         return prevMessages.map(msg => {
           if (msg.id === messageId) {
-            console.log(`更新消息ID ${messageId} 的回复`);
             return { ...msg, replies };
           }
           return msg;
@@ -168,11 +165,6 @@ const Home: React.FC<HomeProps> = ({ user }) => {
     </Menu>
   );
 
-  // 打印用户信息，用于调试
-  useEffect(() => {
-    console.log('Current user:', user);
-  }, [user]);
-
   useEffect(() => {
     fetchMessages();
   }, []);
@@ -263,7 +255,12 @@ const Home: React.FC<HomeProps> = ({ user }) => {
             <Card style={{ marginBottom: 24 }}>
               <Title level={4}>发表留言</Title>
               <Form form={form} onFinish={handleSubmit}>
-                <Form.Item name="content">
+                <Form.Item name="content" 
+                rules={[
+                  { min: 3, message: '至少3个字符' },
+                  { max: 200, message: '最多200个字符'}
+                ]}
+                >
                   <TextArea rows={4} placeholder="写下你的想法..." />
                 </Form.Item>
                 <Form.Item>

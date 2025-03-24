@@ -1,5 +1,6 @@
 package lemoon.messageboard.controller;
 
+import jakarta.validation.Valid;
 import lemoon.messageboard.application.dto.MessageDTO;
 import lemoon.messageboard.application.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/createMessage")
-    public ResponseEntity<MessageDTO> createMessage(@RequestBody MessageDTO messageDTO) {
+    public ResponseEntity<MessageDTO> createMessage(@RequestBody @Valid MessageDTO messageDTO) {
         MessageDTO createdMessage = messageService.createRootMessage(messageDTO);
         return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
     }
@@ -24,7 +25,7 @@ public class MessageController {
     @PostMapping("/{parentId}/reply")
     public ResponseEntity<MessageDTO> replyToMessage(
             @PathVariable("parentId") Long parentId,
-            @RequestBody MessageDTO messageDTO) {
+            @RequestBody @Valid MessageDTO messageDTO) {
         MessageDTO reply = messageService.replyToMessage(parentId, messageDTO);
         return new ResponseEntity<>(reply, HttpStatus.CREATED);
     }
