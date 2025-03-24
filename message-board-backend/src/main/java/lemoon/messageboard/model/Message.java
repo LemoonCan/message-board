@@ -1,33 +1,36 @@
 package lemoon.messageboard.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+/**
+ * @author lemoon
+ * @since 2025/3/24
+ */
 @Entity
 @Table(name = "message")
+@Data
 public class Message {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, length = 1000)
+
+    @Column(nullable = false)
     private String content;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Message parent;
+
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-    
+    private LocalDateTime createdAt;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-} 
+}

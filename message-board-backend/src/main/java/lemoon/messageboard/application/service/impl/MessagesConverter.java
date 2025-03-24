@@ -5,13 +5,12 @@ import lemoon.messageboard.model.Customer;
 import lemoon.messageboard.model.Message;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * @author lemoon
- * @since 2025/3/23
+ * @since 2025/3/24
  */
-public class MessageConverter {
+public class MessagesConverter {
     public static MessageDTO toDTO(Message message) {
         if (message == null) {
             return null;
