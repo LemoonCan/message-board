@@ -39,7 +39,6 @@ public class JwtTokenProvider {
      */
     public String createToken(Authentication authentication, boolean rememberMe) {
         long now = System.currentTimeMillis();
-        // 根据rememberMe状态选择不同的过期时间
         long tokenValidity = rememberMe ? REMEMBER_TOKEN_VALIDITY : SESSION_TOKEN_VALIDITY;
         Date validity = new Date(now + tokenValidity);
 

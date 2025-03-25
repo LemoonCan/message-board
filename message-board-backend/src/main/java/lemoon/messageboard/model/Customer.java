@@ -19,7 +19,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -28,9 +28,9 @@ public class Customer {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "last_login_at")
+    @Column
     private LocalDateTime lastLoginAt;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column
     private LocalDateTime createdAt;
 } 

@@ -1,8 +1,8 @@
 package lemoon.messageboard.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +21,7 @@ public class LoginParam {
 
     @NotBlank(message = "密码不能为空")
     private String password;
-    
-    private Boolean rememberMe = false;
+
+    @NotNull
+    private Boolean rememberMe;
 } 

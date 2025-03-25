@@ -28,9 +28,9 @@ public class Message {
     @JoinColumn(name = "parent_id")
     private Message parent;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column
     private LocalDateTime updatedAt;
 }

@@ -1,6 +1,8 @@
 package lemoon.messageboard.application.service;
 
 import lemoon.messageboard.application.dto.CustomerDTO;
+import lemoon.messageboard.application.dto.LoginDTO;
+import lemoon.messageboard.application.dto.LoginParam;
 import lemoon.messageboard.application.dto.RegisterParam;
 
 /**
@@ -15,15 +17,10 @@ public interface CustomerService {
     void register(RegisterParam registerParam);
 
     /**
-     * 更新最后登录时间
-     * @param name 用户名
+     * 登录
+     * @param loginParam 登录参数
+     * @return 登录信息
      */
-    void updateLastLoginDate(String name);
 
-    /**
-     * 查找用户
-     * @param name 用户名
-     * @return
-     */
-    CustomerDTO findUser(String name);
+    LoginDTO login(LoginParam loginParam);
 }
