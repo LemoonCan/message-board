@@ -16,7 +16,7 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
 
-    @PostMapping("/createMessage")
+    @PostMapping
     public ResponseEntity<MessageDTO> createMessage(@RequestBody @Valid MessageDTO messageDTO) {
         MessageDTO createdMessage = messageService.createRootMessage(messageDTO);
         return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);

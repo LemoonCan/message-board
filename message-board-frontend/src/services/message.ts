@@ -119,7 +119,7 @@ export const createMessage = async (data: CreateMessageRequest): Promise<Message
     };
     
     
-    const response = await axios.post(`${API_URL}/messages/createMessage`, messageDTO, {
+    const response = await axios.post(`${API_URL}/messages`, messageDTO, {
       headers: {
         'Authorization': authHeader
       }
