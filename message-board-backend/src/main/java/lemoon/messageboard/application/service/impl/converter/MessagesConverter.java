@@ -3,6 +3,7 @@ package lemoon.messageboard.application.service.impl.converter;
 import lemoon.messageboard.application.dto.MessageDTO;
 import lemoon.messageboard.model.Customer;
 import lemoon.messageboard.model.Message;
+import lemoon.messageboard.model.MessageInfo;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,18 @@ public class MessagesConverter {
         dto.setCustomerName(message.getCustomer().getName());
         dto.setCreatedAt(message.getCreatedAt());
         dto.setUpdatedAt(message.getUpdatedAt());
+        return dto;
+    }
+
+    public static MessageDTO toDTO(MessageInfo messageInfo) {
+        if (messageInfo == null) {
+            return null;
+        }
+        MessageDTO dto = new MessageDTO();
+        dto.setId(messageInfo.getId());
+        dto.setContent(messageInfo.getContent());
+        dto.setCustomerName(messageInfo.getCustomerName());
+        dto.setCreatedAt(messageInfo.getCreatedAt());
         return dto;
     }
 

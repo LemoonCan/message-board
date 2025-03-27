@@ -5,6 +5,7 @@ import lemoon.messageboard.application.service.MessageService;
 import lemoon.messageboard.application.service.impl.converter.MessagesConverter;
 import lemoon.messageboard.model.Customer;
 import lemoon.messageboard.model.Message;
+import lemoon.messageboard.model.MessageInfo;
 import lemoon.messageboard.repository.CustomerRepository;
 import lemoon.messageboard.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,14 +60,14 @@ public class MessageServiceImpl implements MessageService {
         Map<Long, List<MessageDTO>> parentMap = new HashMap<>();
         List<MessageDTO> roots = new ArrayList<>();
 
-        List<Message> messages = messageRepository.findAllByIdAtDesc();
+        List<MessageInfo> messages = messageRepository.findAllByIdAtDesc();
         messages.forEach(message -> {
-            if (message.getParent() == null) {
+            if (message.getParentId() == null) {
                 roots.add(MessagesConverter.toDTO(message));
             } else {
-                List<MessageDTO> children = parentMap.getOrDefault(message.getParent().getId(), new ArrayList<>());
+                List<MessageDTO> children = parentMap.getOrDefault(message.getParentId(), new ArrayList<>());
                 children.add(MessagesConverter.toDTO(message));
-                parentMap.put(message.getParent().getId(), children);
+                parentMap.put(message.getParentId(), children);
             }
         });
 
